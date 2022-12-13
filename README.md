@@ -28,6 +28,10 @@ _The software may compile and run successfully with older versions of these requ
 
 - Probably use MinGW? I don't know.
 
+### How to play
+
+For instruction on how to play the game you can read the included [HOW_TO_PLAY.md file](HOW_TO_PLAY.md).
+
 ## License
 
 You may read the software's license in the included [LICENSE.txt file](LICENSE.txt).
