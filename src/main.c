@@ -52,6 +52,31 @@ int parse_input( char* user_input, int* x, int* y )
 
 int check_commands( char* user_input, int size, int* cmd )
 {
+    switch ( user_input[0] ) {
+        case 'f':
+            *cmd = 1;
+            return 1;
+
+        case 'F':
+            *cmd = 2;
+            return 2;
+
+        case 'e':
+        case 'E':
+            *cmd = 3;
+            return 3;
+
+        case 'c':
+            *cmd = 4;
+            return 4;
+
+        default:
+            *cmd = 0;
+            return 0;
+
+    }
+
+    /*
     if ( user_input[0] == 'f' ) {
         *cmd = 1;
         return 1;
@@ -69,9 +94,10 @@ int check_commands( char* user_input, int size, int* cmd )
 
     *cmd = 0;
     return 0;
+    */
 }
 
-void check_nearby_row_squares( int8_t* board, int width, int height, int x, int y, int y_pos, int8_t* counter)
+void check_nearby_row_squares( int8_t* board, int width, int height, int x, int y, int y_pos, int8_t* counter )
 {
     if ( y_pos < 0 || y_pos >= height ) return;
 
@@ -81,6 +107,19 @@ void check_nearby_row_squares( int8_t* board, int width, int height, int x, int 
         if ( x_1 < 0 || x_1 >= width ) continue;
 
         if ( board[ y_pos * width + x_1 ] == ND_MINE_HIDDEN || board[ y_pos * width + x_1 ] == ND_FLAG_MINE ) *counter += 1;
+    }
+}
+
+void check_nearby_flag_squares( int8_t* board, int width, int height, int x, int y, int y_pos, int8_t* counter )
+{
+    if ( y_pos < 0 || y_pos >= height ) return;
+
+    for ( int i = -1; i < 2; i++ ) {
+        int x_1 = x + i;
+
+        if ( x_1 < 0 || x_1 >= width ) continue;
+
+        if ( board[ y_pos * width + x_1 ] == ND_FLAG_MINE ) *counter += 1;
     }
 }
 
@@ -156,9 +195,24 @@ void print_board( int8_t* board, int width, int height )
     printf("\n\n");
 }
 
+void print_stats( int number_of_mines, int checked, int spaces )
+{
+    printf("\t\tMINES: %d\t\tREVEALED: %d/%d\n\n", number_of_mines, checked, spaces-number_of_mines);
+}
+
+int calc_cell_value( int8_t* game_board, int width, int height, int x, int y )
+{
+    int8_t  nearby_mine_counter = 0;
+
+    check_nearby_row_squares( game_board, width, height, x, y, y - 1, &nearby_mine_counter );
+    check_nearby_row_squares( game_board, width, height, x, y, y, &nearby_mine_counter );
+    check_nearby_row_squares( game_board, width, height, x, y, y + 1, &nearby_mine_counter );
+
+    return nearby_mine_counter;
+}
+
 int main( void )
 {
-    FILE*       log;
     int8_t*     game_board;
     int         width = 0, height = 0;
 
@@ -197,6 +251,7 @@ int main( void )
     {
         CLR();
         print_board( game_board, width, height );
+        print_stats( number_of_mines, checked, (width * height) );
 
         if ( loser ) break;
         if ( checked == (width * height) - number_of_mines ) break;
@@ -204,6 +259,7 @@ int main( void )
         char    user_input[9];
         int     x = -1, y = -1;
 
+        printf(": ");
         if ( fgets( user_input, sizeof(user_input), stdin ) ) {
             if ( check_commands( user_input, sizeof( user_input ), &cmd ) > 0 ) {
                 parse_input( user_input + sizeof(char), &x, &y );
@@ -225,13 +281,8 @@ int main( void )
 
                     }
                     else if ( game_board[ y * width + x ] == ND_EMPTY_SPACE ) {
-                        int8_t  nearby_mine_counter = 0;
+                        set_in_board( game_board, width, x, y, calc_cell_value( game_board, width, height, x, y ) );
 
-                        check_nearby_row_squares( game_board, width, height, x, y, y - 1, &nearby_mine_counter );
-                        check_nearby_row_squares( game_board, width, height, x, y, y, &nearby_mine_counter );
-                        check_nearby_row_squares( game_board, width, height, x, y, y + 1, &nearby_mine_counter );
-
-                        set_in_board( game_board, width, x, y, nearby_mine_counter );
                         checked++;
                     }
                     break;
@@ -257,6 +308,41 @@ int main( void )
 
                     }
                     break;
+
+                case 4:
+                {
+                    int8_t value = game_board[ y * width + x ];
+
+                    // If it is not a number, ignore
+                    if ( value == ND_EMPTY_SPACE || value == ND_MINE_HIDDEN || value == ND_FLAG_EMPTY || value == ND_FLAG_MINE ) break;
+
+                    int8_t nearby_mine_counter = 0;
+
+                    check_nearby_flag_squares( game_board, width, height, x, y, y-1, &nearby_mine_counter );
+                    check_nearby_flag_squares( game_board, width, height, x, y, y, &nearby_mine_counter );
+                    check_nearby_flag_squares( game_board, width, height, x, y, y+1, &nearby_mine_counter );
+
+                    // Cannot clear nearby if they are not equal
+                    if ( nearby_mine_counter != value ) break;
+
+                    for ( int y_1 = y-1; y_1 <= y+1; y_1++ ) {
+                        for ( int x_1 = x - 1; x_1 <= x+1; x_1++ ) {
+                            if ( y_1 < 0 || y_1 >= height || x_1 < 0 || x_1 >= width ) continue;
+
+                            if ( game_board[ y_1 * width + x_1 ] == ND_EMPTY_SPACE ) {
+                                set_in_board( game_board, width, x_1, y_1, calc_cell_value( game_board, width, height, x_1, y_1 ) );
+
+                                checked++;
+                            }
+                            else if ( game_board[ y_1 * width + x_1 ] == ND_MINE_HIDDEN ) {
+                                set_in_board( game_board, width, x_1, y_1, ND_MINE );
+
+                                loser = true;
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }

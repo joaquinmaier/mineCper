@@ -39,6 +39,13 @@ Moreover, a few commands are available, selected by putting the corresponding le
 
     Usage of this command is recommended instead of using Ctrl+C since it frees up used memory.
 
+* Clear Nearby Cells (**c**):
+    By placing the letter _c_ (lowercase c) before the coordinates, the game will check whether the number of nearby flags is equal to the cell value, and clear all nearby cells.
+    This is especially useful for clearing large chunks of empty space.
+
+    Do note that this command may be activated if a flag is incorrectly placed, thus exploding a mine and ending the game.
+
+
 [^1]: This is with the exception of commands, which are strict.
     All commands MUST be set in the first character, and will be ignored otherwise.
 
