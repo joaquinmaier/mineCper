@@ -141,4 +141,17 @@ int8_t calc_cell_value( int8_t* game_board, int width, int height, int x, int y 
     return nearby_mine_counter;
 }
 
+int8_t* init_board( int width, int height )
+{
+    int8_t* ptr = malloc( (width * height) * sizeof(int8_t) );
+
+    for ( int y = 0; y < height; y++ ) {
+        for ( int x = 0; x < width; x++ ) {
+            ptr[ y * width + x ] = ND_EMPTY_SPACE;
+
+        }
+    }
+
+    return ptr;
+}
 

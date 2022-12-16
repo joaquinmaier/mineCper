@@ -48,16 +48,10 @@ int main( void )
     }
 
     // Initialize the game board
-    game_board  = malloc( (width * height) * sizeof(int8_t) );
-
-    for ( int y = 0; y < height; y++ ) {
-        for ( int x = 0; x < width; x++ ) {
-            game_board[ y * width + x ] = ND_EMPTY_SPACE;
-
-        }
-    }
+    game_board  = init_board( width, height );
 
     // Populate the board with mines
+
     int     number_of_mines = ( width * height ) * AVG_MINE_RATIO;
 
     populate_board( game_board, number_of_mines, width, height );

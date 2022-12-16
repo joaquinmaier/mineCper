@@ -15,6 +15,7 @@
 
 void    set_in_board( int8_t* board, int board_width, int x, int y, int8_t val );
 
+int8_t* init_board( int width, int height );
 void    populate_board( int8_t* board, int number_of_mines, int width, int height );
 int8_t  calc_cell_value( int8_t* game_board, int width, int height, int x, int y );
 
