@@ -59,8 +59,8 @@ void populate_board( int8_t* board, int number_of_mines, int width, int height )
         int     x = rand() % width;
         int     y = rand() % height;
 
-        if ( board[y * width + x] != -1 ) {
-            board[y * width + x] = -1;
+        if ( board[y * width + x] != ND_MINE_HIDDEN ) {
+            board[y * width + x] = ND_MINE_HIDDEN;
         }
 
         else    i--;
