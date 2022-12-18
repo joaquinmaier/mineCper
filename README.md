@@ -1,6 +1,15 @@
-# mineCper
-
-A console minesweeper clone, built in C.
+<p align="center">
+  <br>
+  <img src="img/mineCper-logo.png" alt="mineCper logo"></img>
+  <br>
+  <br>
+  <span>A console minesweeper clone, built in C.</span>
+  <br>
+  <img src="https://img.shields.io/badge/C-%2300599C?style=flat&logo=c&logoColor=white"></img>
+  <img src="https://img.shields.io/badge/standard-C17-green?style=flat"></img>
+  <a target="_blank" href="LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat"></img></a>
+  <img src="https://img.shields.io/badge/version-1.0.0-important?style=flat"></img>
+</p>
 
 ## Why?
 

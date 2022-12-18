@@ -27,12 +27,24 @@ Moreover, a few commands are available, selected by putting the corresponding le
     This safeguards you from mistakingly selecting it and losing.
 
     You cannot place flags on spots you have already revealed.
+    
+    <p align="center">
+        <img src="img/f_command-before.png"></img>
+        <br>
+        <img src="img/f_command-after.png"></img>
+    </p>
 
 * **Unset Flag (F):**
     By placing the letter _F_ (uppercase f) before the coordinates, the game will attempt to remove a flag instead of revealing, or placing another one.
     This allows you to correct any mistakes you may have done regarding a flag's position.
 
     This command does is simply ignored if no flags are set in the position specified.
+    
+    <p align="center">
+        <img src="img/F_command-before.png"></img>
+        <br>
+        <img src="img/F_command-after.png"></img>
+    </p»
 
 * **Exit Game (e OR E):**
     By placing the letter _e_ or _E_ before ANYTHING, the game will close.
@@ -44,7 +56,12 @@ Moreover, a few commands are available, selected by putting the corresponding le
     This is especially useful for clearing large chunks of empty space.
 
     Do note that this command may be activated if a flag is incorrectly placed, thus exploding a mine and ending the game.
-
+    
+    <p align="center">
+        <img src="img/c_command-before.png"></img>
+        <br>
+        <img src="img/c_command-after.png"></img>
+    </p>
 
 [^1]: This is with the exception of commands, which are strict.
     All commands MUST be set in the first character, and will be ignored otherwise.
