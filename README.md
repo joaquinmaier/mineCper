@@ -1,4 +1,4 @@
-# mineCper
+<p align="center"><img src="img/mineCper-logo.png" alt="mineCper logo"></img></p>
 
 A console minesweeper clone, built in C.
 
